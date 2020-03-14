@@ -5,11 +5,13 @@
     <string name="info_android_zh">Android先走棋</string>
     <string name="starts_new_game">开始新游戏</string>
     <string name="restart_zh">重新开始</string>
+    <string name="exist_zh">退出程序</string>
     <string name="android_turn">Android下棋</string>
     <string name="your_turn">你下棋</string>
     <string name="your_won">你赢了</string>
     <string name="android_won">安卓赢了</string>
     <string name="your_won_time">你赢的次数</string>
     <string name="android_won_time">安卓赢的次数</string>
+    <string name="tie_time">平局的次数</string>
     <string name="tie">平局！</string>
 </resources>

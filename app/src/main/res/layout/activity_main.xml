@@ -131,6 +131,15 @@
             android:text="@string/android_won_time"
             android:textSize="20sp" >
         </TextView>
+        <TextView
+            android:id="@+id/tie_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/tie_time"
+            android:textSize="20sp" >
+        </TextView>
     <Button
         android:id="@+id/button_restart"
         android:layout_width="wrap_content"
@@ -141,5 +150,15 @@
         android:textSize="20sp"
         android:onClick="startNewGame" >
     </Button>
+        <Button
+            android:id="@+id/button_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="@string/exist_zh"
+            android:textSize="20sp"
+            android:onClick="startNewGame" >
+        </Button>
 </LinearLayout>
 </LinearLayout>

@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mInfoTextView;
     private TextView youWonTextView;
     private TextView androidWonTextView;
+    private TextView tieTextView;
+    private Button extBtn;
 
     // Restart Button
     private Button startButton;
@@ -27,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
     Boolean human_first;
     int human_won_time = 0;
     int android_won_time = 0;
+    int tie_time = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mGame = new TicTacToeGame();
         mBoardButtons = new Button[mGame.BOARD_SIZE];
         mBoardButtons[0] = (Button) findViewById(R.id.button0);
@@ -45,15 +47,23 @@ public class MainActivity extends AppCompatActivity {
         mBoardButtons[7] = (Button) findViewById(R.id.button7);
         mBoardButtons[8] = (Button) findViewById(R.id.button8);
         mInfoTextView = (TextView) findViewById(R.id.information);
-
         youWonTextView=(TextView)findViewById(R.id.human_won);
         androidWonTextView=(TextView)findViewById(R.id.android_won);
+        tieTextView=(TextView)findViewById(R.id.tie_time);
 
         startButton=(Button)findViewById(R.id.button_restart);
+        extBtn=(Button)findViewById(R.id.button_exit);
         mGame = new TicTacToeGame();
-
         startButton.setText(R.string.restart_zh);
         startButton.setOnClickListener(new RestartButtonClickListener());
+        extBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
+
+            }
+        });
         human_first=true;
         loadPreferences();
         startNewGame();
@@ -93,17 +103,21 @@ public class MainActivity extends AppCompatActivity {
             mBoardButtons[location].setTextColor(Color.rgb(200, 0, 0));
     }
 
-    public void savePreferences(String h, String w) {
+    public void savePreferences(String h, String w,String t) {
         SharedPreferences pref = getSharedPreferences("TICTACTOE", MODE_PRIVATE);
         pref.edit().putString("human", h).apply();
         pref.edit().putString("android", w).apply();
+        pref.edit().putString("tic", t).apply();
     }
     public void loadPreferences() {
         SharedPreferences pref = getSharedPreferences("TICTACTOE", MODE_PRIVATE);
         youWonTextView.setText(youWonTextView.getText()+":"+pref.getString("human", "0"));
         androidWonTextView.setText(androidWonTextView.getText()+":"+pref.getString("android", "0"));
+        tieTextView.setText(tieTextView.getText()+":"+pref.getString("tic", "0"));
+
         human_won_time=Integer.parseInt(pref.getString("human", "0"));
         android_won_time=Integer.parseInt(pref.getString("android", "0"));
+        tie_time=Integer.parseInt(pref.getString("tic", "0"));
     }
 
     //---Handles clicks on the game board buttons
@@ -135,6 +149,10 @@ public class MainActivity extends AppCompatActivity {
                        //  mInfoTextView.setText("It's a tie!");
                         mInfoTextView.setText(R.string.tie);
                         mGameOver = true;
+                        tie_time+=1;
+                        String str = getResources().getString(R.string.tie)+":"+String.valueOf(tie_time);
+                        tieTextView.setText(str);
+                        savePreferences(String.valueOf(human_won_time),String.valueOf(android_won_time),String.valueOf(tie_time));
                     } else if (winner == 2) {
                         mInfoTextView.setTextColor(Color.rgb(0, 200, 0));
                         // mInfoTextView.setText("You won!");
@@ -143,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         human_won_time+=1;
                         String str = getResources().getString(R.string.android_turn)+":"+String.valueOf(human_won_time);
                         youWonTextView.setText(str);
-                        savePreferences(String.valueOf(human_won_time),String.valueOf(android_won_time));
+                        savePreferences(String.valueOf(human_won_time),String.valueOf(android_won_time),String.valueOf(tie_time));
                     } else {
                         mInfoTextView.setTextColor(Color.rgb(200, 0, 0));
                        // mInfoTextView.setText("Android won!");
@@ -152,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         android_won_time+=1;
                         String str = getResources().getString(R.string.android_turn)+":"+String.valueOf(android_won_time);
                         androidWonTextView.setText(str);
-                        savePreferences(String.valueOf(human_won_time),String.valueOf(android_won_time));
+                        savePreferences(String.valueOf(human_won_time),String.valueOf(android_won_time),String.valueOf(tie_time));
                     }
                 }
             }
